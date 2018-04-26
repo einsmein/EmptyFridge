@@ -50,5 +50,11 @@ fabric.properties
 # Editor-based Rest Client
 .idea/httpRequests
 
+# All IDE specific things actually
+.idea/
+
 # Build folder
 build/
+
+# Gradle folder
+.gradle/
