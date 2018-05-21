@@ -9,6 +9,22 @@ public class Ingredient {
     private String id;
     private IngredientType type;
     private String name;
+    private int wastePenalty;
+    private int dayTillExp;
+    private float portion;
+
+    public String getId(){
+        return id;
+    }
+    public int getWastePenalty(){
+        return wastePenalty;
+    }
+    public int getDayTillExp(){
+        return dayTillExp;
+    }
+    public float getPortion(){
+        return portion;
+    }
 }
 
 enum IngredientType{
