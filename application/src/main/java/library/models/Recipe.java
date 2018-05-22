@@ -6,14 +6,17 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Document
 public class Recipe {
     @Id private String id;
-    @UniqueElements private String name;
-    private ArrayList<Pair<Ingredient,Double>> ingAmount = new ArrayList<>();
+    @UniqueElements protected String name;
+    protected ArrayList<Pair<Ingredient,Double>> ingAmount = new ArrayList<>();
+
+    public Recipe(String name, ArrayList<Pair<Ingredient,Double>> ingAmount ){
+        this.name = name;
+        this.ingAmount = ingAmount;
+    }
 
     public String getName(){
         return name;

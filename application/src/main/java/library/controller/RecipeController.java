@@ -1,4 +1,4 @@
-package library.Controller;
+package library.controller;
 
 import library.repository.RecipeRepository;
 import library.models.Recipe;
