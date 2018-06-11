@@ -5,23 +5,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 public class Ingredient {
-    @Id
-    private String id;
+    @Id private String id;
     protected String name;
     protected double wastePenalty;
     protected int dayTillExp;
     protected double portion;
 
-    public Ingredient(String name, double penalty, int dayTillExp, double portion){
+    public Ingredient(String name, double wastePenalty, int dayTillExp, double portion){
         this.name = name;
-        this.wastePenalty = penalty;
+        this.wastePenalty = wastePenalty;
         this.dayTillExp = dayTillExp;
         this.portion = portion;
     }
 
-    public String getId(){
-        return id;
-    }
     public String getName() {return name; }
     public double getWastePenalty(){
         return wastePenalty;

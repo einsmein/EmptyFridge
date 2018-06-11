@@ -1,9 +1,9 @@
 package library.models;
 
-import javafx.util.Pair;
 import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.util.Pair;
 
 import java.util.ArrayList;
 
@@ -11,9 +11,9 @@ import java.util.ArrayList;
 public class Recipe {
     @Id private String id;
     @UniqueElements protected String name;
-    protected ArrayList<Pair<Ingredient,Double>> ingAmount = new ArrayList<>();
+    protected ArrayList<Pair<Ingredient,Double>> ingAmount;
 
-    public Recipe(String name, ArrayList<Pair<Ingredient,Double>> ingAmount ){
+    public Recipe(String name, ArrayList<Pair<Ingredient,Double>> ingAmount){
         this.name = name;
         this.ingAmount = ingAmount;
     }
@@ -32,7 +32,7 @@ public class Recipe {
         ingAmount.forEach(ing -> this.ingAmount.add(ing));
     }
 
-    public void addIngredient(Ingredient ingredient, int amount){
-        this.ingAmount.add(new Pair(ingredient, amount));
+    public void addIngredient(Ingredient ingredient, double amount){
+        this.ingAmount.add(Pair.of(ingredient, amount));
     }
 }

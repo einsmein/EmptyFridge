@@ -1,13 +1,27 @@
-<html>
+<html ng-app="app">
 <head>
 
 </head>
-<body ng-app>
+<body ng-controller="AppController">
 HELLO WORLD
 
 <p>Nothing here {{'yet' + '!'}}</p>
 
-<script type="text/javascript" src="./js/angular.min.js"></script>
+<div>
+    <ul>
+        <li ng-repeat="m in menus">
+            {{m}}
+        </li>
+        <li ng-repeat="m in realMenus">
+            {{m.name}}
+        </li>
+    </ul>
+</div>
+<div>
+    {{response}}
+</div>
 
+<script type="text/javascript" src="./js/angular.min.js"></script>
+<script type="text/javascript" src="./js/app/app.js"></script>
 </body>
 </html>

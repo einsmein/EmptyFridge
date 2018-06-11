@@ -1,12 +1,14 @@
 package library;
 
-import javafx.util.Pair;
 import library.models.Ingredient;
 import library.models.Recipe;
+import library.models.WasteIngredient;
 import library.repository.RecipeRepository;
+import org.springframework.data.util.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -16,17 +18,17 @@ public class WasteCalculator {
         this.repo = repo;
     }
 
-    public Map<Ingredient, Double> getWastedIngredient(Iterable<Recipe> recipes){
+    public Map<Ingredient, Double> getSumIngredient(Iterable<Recipe> recipes){
         // Map of ingredient Id and total amount for all recipes
         Map<Ingredient, Double> ingredients = new HashMap<>();
 
         // Convert a list of recipes into a map of ingredient id and total amount
         for (Recipe rec : recipes) {
             for (Pair<Ingredient, Double> p : rec.getIngredientsAmount()) {
-                Ingredient ing = p.getKey();
+                Ingredient ing = p.getFirst();
                 double amount = ingredients.get(ing);
                 if (ingredients.containsKey(ing)) {
-                    amount += p.getValue();
+                    amount += p.getSecond();
                     ingredients.replace(ing, amount);
                 } else {
                     ingredients.put(ing, amount);
@@ -40,11 +42,12 @@ public class WasteCalculator {
     // recipes: chosen set of recipe
     public double getWasteScore(Iterable<Recipe> recipes) {
         // Map of ingredient Id and total amount for all recipes
-        Map<Ingredient, Double> wastedIngredients = getWastedIngredient(recipes);
+        Map<Ingredient, Double> summedIngredients = getSumIngredient(recipes);
+        List<WasteIngredient> wasteIngredients = new ArrayList<>();
 
         // Penalty for leftover = Expire date weight * Penalty weight * Remaining gram (of ingredient j)
         double wasteScore = 0;
-        for(Map.Entry<Ingredient, Double> entry: wastedIngredients.entrySet()){
+        for(Map.Entry<Ingredient, Double> entry: summedIngredients.entrySet()){
             Ingredient ing = entry.getKey();
             double amount = entry.getValue();
             double leftover = Math.ceil(amount/ing.getPortion())*ing.getPortion() - amount;
@@ -77,7 +80,7 @@ public class WasteCalculator {
 
 //                double currentSubScore = recipeSubMap.get(new Pair(chosenRec, newRec));
                 if (newSubScore < wasteScore) {
-                    recipeSubMap.put(new Pair(chosenRec, newRec), newSubScore);
+                    recipeSubMap.put(Pair.of(chosenRec, newRec), newSubScore);
                 }
             }
         }
