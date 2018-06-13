@@ -6,4 +6,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource(exported = false)
 public interface IngredientRepository extends MongoRepository<Ingredient, String> {
+    public Ingredient findByName(String name);
 }

@@ -1,95 +1,147 @@
 package library;
 
-import library.models.Ingredient;
-import library.models.Recipe;
-import library.models.WasteIngredient;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import library.models.*;
+import library.repository.IngredientRepository;
 import library.repository.RecipeRepository;
 import org.springframework.data.util.Pair;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class WasteCalculator {
-    private RecipeRepository repo;
-    public WasteCalculator(RecipeRepository repo){
-        this.repo = repo;
+    private RecipeRepository recRepo;
+    private IngredientRepository ingRepo;
+    ObjectMapper mapper = new ObjectMapper();
+
+    public WasteCalculator(RecipeRepository recRepo, IngredientRepository ingRepo){
+        this.recRepo = recRepo; this.ingRepo = ingRepo;
     }
 
-    public Map<Ingredient, Double> getSumIngredient(Iterable<Recipe> recipes){
-        // Map of ingredient Id and total amount for all recipes
-        Map<Ingredient, Double> ingredients = new HashMap<>();
+    public IngAmountCollection getAllIngredient(Iterable<Recipe> recipes){
+        IngAmountCollection sumIngredient = new IngAmountCollection();
 
-        // Convert a list of recipes into a map of ingredient id and total amount
-        for (Recipe rec : recipes) {
-            for (Pair<Ingredient, Double> p : rec.getIngredientsAmount()) {
-                Ingredient ing = p.getFirst();
-                double amount = ingredients.get(ing);
-                if (ingredients.containsKey(ing)) {
-                    amount += p.getSecond();
-                    ingredients.replace(ing, amount);
-                } else {
-                    ingredients.put(ing, amount);
-                }
+        for (Recipe rec : recipes){
+            IngAmountCollection thisRecipe = new IngAmountCollection(rec.getIngredientsAmount());
+            for (String ingName: thisRecipe.getIngredientSet()){
+                sumIngredient.update(ingName, thisRecipe.getAmount(ingName)+ sumIngredient.getAmount(ingName));
             }
         }
-        return ingredients;
 
+        return sumIngredient;
     }
 
-    // recipes: chosen set of recipe
-    public double getWasteScore(Iterable<Recipe> recipes) {
-        // Map of ingredient Id and total amount for all recipes
-        Map<Ingredient, Double> summedIngredients = getSumIngredient(recipes);
-        List<WasteIngredient> wasteIngredients = new ArrayList<>();
-
-        // Penalty for leftover = Expire date weight * Penalty weight * Remaining gram (of ingredient j)
-        double wasteScore = 0;
-        for(Map.Entry<Ingredient, Double> entry: summedIngredients.entrySet()){
-            Ingredient ing = entry.getKey();
-            double amount = entry.getValue();
-            double leftover = Math.ceil(amount/ing.getPortion())*ing.getPortion() - amount;
-            wasteScore += ing.getWastePenalty()*ing.getDayTillExp()*leftover;
+    public IngAmountCollection getAllIngredient(IngAmountCollection collection, IngAmountCollection diff){
+        IngAmountCollection newCollection = new IngAmountCollection();
+        for(String ingName: diff.getIngredientSet()){
+            newCollection.update(ingName, collection.getAmount(ingName) + diff.getAmount(ingName));
         }
 
+        return newCollection;
+    }
+
+    public IngSummaryCollection getSummary(IngAmountCollection allIngredients){
+        IngSummaryCollection summaryCollection = new IngSummaryCollection();
+
+        for(String ingName: allIngredients.getIngredientSet()){
+            Ingredient ing = ingRepo.findByName(ingName);
+            double amount = allIngredients.getAmount(ingName);
+            int piece = (int) Math.ceil(amount/ing.getPortion());
+            double leftover = piece*ing.getPortion() - amount;
+            double wasteScore = ing.getWastePenalty()*(1.0/ing.getDayTillExp())*leftover;
+
+            summaryCollection.add(ing.getName(), new IngSummaryInfo(piece, leftover, wasteScore));
+        }
+
+        return summaryCollection;
+    }
+
+
+    // recipes: chosen set of recipe
+    public double getWasteScore(Iterable<IngSummaryInfo> ingSummaryInfos) {
+        double wasteScore = 0;
+        for(IngSummaryInfo ing: ingSummaryInfos){
+            wasteScore += ing.wasteScore;
+        }
         return wasteScore;
     }
 
     // recipes: chosen set of recipe
-    // return
-    public Map <Pair<Recipe,Recipe>, Double> getSuggestion(Iterable<Recipe> recipes){
-        double wasteScore = getWasteScore(recipes);
+    public List<SubSummary> getSuggestion(Iterable<Recipe> recipes){
+        IngAmountCollection oldIngredient = getAllIngredient(recipes);
+        IngSummaryCollection oldSummaries = getSummary(oldIngredient);
+        double oldWasteScore = oldSummaries.getWasteScore();
 
-        Iterable<Recipe> allRecipes = repo.findAll();
-        ArrayList<Recipe> recipeList = new ArrayList<>();
-        recipes.forEach(rec -> recipeList.add(rec));
-        Map<Pair<Recipe, Recipe>, Double> recipeSubMap = new HashMap<>();
-//        Map<Double, List<Pair<Recipe,Recipe>>>
+        // Suggestions as a MAX HEAP of size 10
+        PriorityQueue<SubSummary> suggestions = new PriorityQueue(10, Collections.reverseOrder());
+        int maxSuggestion = 7;
 
-        for (Recipe chosenRec: recipeList){
+        // Create a list of ALL recipes in the database
+        // and a list of the CHOSEN recipes
+        Iterable<Recipe> allRecipes = recRepo.findAll();
+        ArrayList<Recipe> oldRecipeList = new ArrayList<>();
+        ArrayList<Recipe> newRecipeList = new ArrayList<>();
+        recipes.forEach(rec -> oldRecipeList.add(rec));
+        recipes.forEach(rec -> newRecipeList.add(rec));
+
+        // Try sub each chosen recipe with each recipes in the database
+        for (Recipe chosenRec: oldRecipeList){
             for (Recipe newRec: allRecipes){
-                recipeList.remove(chosenRec);
-                recipeList.add(newRec);
+                if(oldRecipeList.contains(newRec)) continue;
+                newRecipeList.remove(chosenRec);
+                newRecipeList.add(newRec);
 
-                double newSubScore = getWasteScore(recipeList);
-//                if(!recipeSubMap.containsKey(chosenRec)){
-//                    recipeSubMap.put(new Pair(chosenRec, newRec), newSubScore);
-//                }
+                // Get new summary and check if waste score reduces.
+                // If it does, calculate delta to create summary of substitution
+                IngAmountCollection diff = getDiffIngredientAmount(chosenRec, newRec);
+                IngAmountCollection newIngredients = getAllIngredient(oldIngredient, diff);
+                IngSummaryCollection newSummaries = getSummary(newIngredients);
+                double newWasteScore = newSummaries.getWasteScore();
 
-//                double currentSubScore = recipeSubMap.get(new Pair(chosenRec, newRec));
-                if (newSubScore < wasteScore) {
-                    recipeSubMap.put(Pair.of(chosenRec, newRec), newSubScore);
+                // If heap is not full, add new sub
+                // If full, peek the maximum SubSummary, if waste score is higher than new sub, replace it
+                // TODO: calculate diff waste amount
+                SubSummary subSummary = new SubSummary(chosenRec, newRec, new IngAmountCollection(), newWasteScore-oldWasteScore);
+                if (suggestions.size() < maxSuggestion){
+                    suggestions.add(subSummary);
                 }
+                else if (subSummary.hasLowerWaste(suggestions.peek())){
+                    suggestions.poll();
+                    suggestions.add(subSummary);
+                }
+
+                try {
+                    System.out.println("Sub menu: " + chosenRec.getName() + " -> " + newRec.getName());
+                    System.out.println("New list: " + mapper.writeValueAsString(newRecipeList));
+                    System.out.println("Ingredient diff: " + diff.toString());
+                    System.out.println("Waste score: " + oldWasteScore + " -> " + newWasteScore);
+                    System.out.println("Ingredient list: " + oldIngredient.toString() + " -> " + newIngredients.toString());
+                    System.out.println(newSummaries.toString());
+                } catch(Exception e){
+                    e.printStackTrace();
+                }
+                newRecipeList.remove(newRec);
+                newRecipeList.add(chosenRec);
             }
         }
 
-        Map<Pair<Recipe, Recipe>, Double> sortedRecipeSubMap
-                = recipeSubMap.entrySet().stream()
-                    .sorted(Map.Entry.comparingByValue())
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, HashMap::new));
-
-        return sortedRecipeSubMap;
+        ArrayList<SubSummary> suggestionList = new ArrayList<>();
+        SubSummary subSum;
+        while((subSum = suggestions.poll()) != null){
+            suggestionList.add(subSum);
+        }
+        return suggestionList;
     }
+
+    public IngAmountCollection getDiffIngredientAmount(Recipe oldRec, Recipe newRec){
+        IngAmountCollection diffIngredient = new IngAmountCollection();
+        for(Pair<Ingredient, Double> ing: oldRec.getIngredientsAmount()){
+            diffIngredient.update(ing.getFirst().getName(), -ing.getSecond());
+        }
+        for(Pair<Ingredient, Double> ing: newRec.getIngredientsAmount()){
+            double amount = diffIngredient.getAmount(ing.getFirst().getName());
+            diffIngredient.update(ing.getFirst().getName(), amount + ing.getSecond());
+        }
+        return diffIngredient;
+    }
+
 }

@@ -1,12 +1,13 @@
 package library.models;
 
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 public class Ingredient {
     @Id private String id;
-    protected String name;
+    @UniqueElements protected String name;
     protected double wastePenalty;
     protected int dayTillExp;
     protected double portion;

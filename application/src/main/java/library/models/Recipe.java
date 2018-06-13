@@ -8,7 +8,7 @@ import org.springframework.data.util.Pair;
 import java.util.ArrayList;
 
 @Document
-public class Recipe {
+public class Recipe implements Comparable<Recipe>{
     @Id private String id;
     @UniqueElements protected String name;
     protected ArrayList<Pair<Ingredient,Double>> ingAmount;
@@ -34,5 +34,10 @@ public class Recipe {
 
     public void addIngredient(Ingredient ingredient, double amount){
         this.ingAmount.add(Pair.of(ingredient, amount));
+    }
+
+    @Override
+    public int compareTo(Recipe o) {
+        return this.name.compareTo(o.name);
     }
 }
