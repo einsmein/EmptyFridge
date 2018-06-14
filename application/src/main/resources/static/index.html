@@ -1,27 +1,44 @@
 <html ng-app="app">
 <head>
-
+    <title>EmptyFridge</title>
+    <script type="text/javascript" src="./js/angular.min.js"></script>
+    <script type="text/javascript" src="./js/app/app.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body ng-controller="AppController">
-HELLO WORLD
+<div class="container">
+    <div class="form-group" id="menu-selection">
+        <form id="chooseMenu" ng-submit="chooseRecipes()">
+            <select multiple class="form-control" ng-model="chosenMenus" name="chooseMenu">
+                <option ng-repeat="m in menus">{{m.name}}</option>
+            </select>
+            <input type="submit">
+        </form>
+    </div>
 
-<p>Nothing here {{'yet' + '!'}}</p>
+    <div id="ingredients">
 
-<div>
-    <ul>
-        <li ng-repeat="m in menus">
-            {{m}}
-        </li>
-        <li ng-repeat="m in realMenus">
-            {{m.name}}
-        </li>
-    </ul>
+    </div>
+
+    <div id="suggestions">
+        <suggestions></suggestions>
+    </div>
+
+    <div>
+        <h2>DEBUG Response</h2>
+        <p>
+            {{chosenMenus}}
+        </p>
+        <p>
+            {{response}}
+        </p>
+    </div>
+
 </div>
-<div>
-    {{response}}
-</div>
-
-<script type="text/javascript" src="./js/angular.min.js"></script>
-<script type="text/javascript" src="./js/app/app.js"></script>
 </body>
 </html>

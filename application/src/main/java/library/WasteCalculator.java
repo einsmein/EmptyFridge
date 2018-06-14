@@ -47,7 +47,7 @@ public class WasteCalculator {
             double amount = allIngredients.getAmount(ingName);
             int piece = (int) Math.ceil(amount/ing.getPortion());
             double leftover = piece*ing.getPortion() - amount;
-            double wasteScore = ing.getWastePenalty()*(1.0/ing.getDayTillExp())*leftover;
+            double wasteScore = ing.getWastePenalty()*(1.0/(1+Math.pow(ing.getDayTillExp(),1.0/6)))*leftover;
 
             summaryCollection.add(ing.getName(), new IngSummaryInfo(piece, leftover, wasteScore));
         }
@@ -55,21 +55,9 @@ public class WasteCalculator {
         return summaryCollection;
     }
 
-
     // recipes: chosen set of recipe
-    public double getWasteScore(Iterable<IngSummaryInfo> ingSummaryInfos) {
-        double wasteScore = 0;
-        for(IngSummaryInfo ing: ingSummaryInfos){
-            wasteScore += ing.wasteScore;
-        }
-        return wasteScore;
-    }
-
-    // recipes: chosen set of recipe
-    public List<SubSummary> getSuggestion(Iterable<Recipe> recipes){
-        IngAmountCollection oldIngredient = getAllIngredient(recipes);
-        IngSummaryCollection oldSummaries = getSummary(oldIngredient);
-        double oldWasteScore = oldSummaries.getWasteScore();
+    public List<SubSummary> getSuggestion(List<Recipe> recipes, IngAmountCollection ingredients, IngSummaryCollection summary){
+        double oldWasteScore = summary.getWasteScore();
 
         // Suggestions as a MAX HEAP of size 10
         PriorityQueue<SubSummary> suggestions = new PriorityQueue(10, Collections.reverseOrder());
@@ -78,22 +66,18 @@ public class WasteCalculator {
         // Create a list of ALL recipes in the database
         // and a list of the CHOSEN recipes
         Iterable<Recipe> allRecipes = recRepo.findAll();
-        ArrayList<Recipe> oldRecipeList = new ArrayList<>();
-        ArrayList<Recipe> newRecipeList = new ArrayList<>();
-        recipes.forEach(rec -> oldRecipeList.add(rec));
-        recipes.forEach(rec -> newRecipeList.add(rec));
+//        ArrayList<Recipe> oldRecipeList = new ArrayList<>();
+//        recipes.forEach(rec -> oldRecipeList.add(rec));
 
         // Try sub each chosen recipe with each recipes in the database
-        for (Recipe chosenRec: oldRecipeList){
+        for (Recipe chosenRec: recipes){
             for (Recipe newRec: allRecipes){
-                if(oldRecipeList.contains(newRec)) continue;
-                newRecipeList.remove(chosenRec);
-                newRecipeList.add(newRec);
+                if(recipes.contains(newRec)) continue;
 
                 // Get new summary and check if waste score reduces.
                 // If it does, calculate delta to create summary of substitution
                 IngAmountCollection diff = getDiffIngredientAmount(chosenRec, newRec);
-                IngAmountCollection newIngredients = getAllIngredient(oldIngredient, diff);
+                IngAmountCollection newIngredients = getAllIngredient(ingredients, diff);
                 IngSummaryCollection newSummaries = getSummary(newIngredients);
                 double newWasteScore = newSummaries.getWasteScore();
 
@@ -111,16 +95,13 @@ public class WasteCalculator {
 
                 try {
                     System.out.println("Sub menu: " + chosenRec.getName() + " -> " + newRec.getName());
-                    System.out.println("New list: " + mapper.writeValueAsString(newRecipeList));
                     System.out.println("Ingredient diff: " + diff.toString());
                     System.out.println("Waste score: " + oldWasteScore + " -> " + newWasteScore);
-                    System.out.println("Ingredient list: " + oldIngredient.toString() + " -> " + newIngredients.toString());
+//                    System.out.println("Ingredient list: " + oldIngredient.toString() + " -> " + newIngredients.toString());
                     System.out.println(newSummaries.toString());
                 } catch(Exception e){
                     e.printStackTrace();
                 }
-                newRecipeList.remove(newRec);
-                newRecipeList.add(chosenRec);
             }
         }
 
@@ -132,14 +113,29 @@ public class WasteCalculator {
         return suggestionList;
     }
 
+    public IngAndSuggestionResponse getIngAndSuggestion(Iterable<Recipe> recipes){
+        ArrayList<Recipe> recipeList = new ArrayList<>();
+        recipes.forEach(rec -> recipeList.add(rec));
+        IngAmountCollection ingredients = getAllIngredient(recipes);
+        IngSummaryCollection summary = getSummary(ingredients);
+
+        List<SubSummary> suggestions = getSuggestion(recipeList, ingredients, summary);
+
+        IngAndSuggestionResponse response = new IngAndSuggestionResponse();
+        response.ingredientsSummary = summary;
+        response.suggestionList = suggestions;
+
+        return response;
+    }
+
     public IngAmountCollection getDiffIngredientAmount(Recipe oldRec, Recipe newRec){
         IngAmountCollection diffIngredient = new IngAmountCollection();
-        for(Pair<Ingredient, Double> ing: oldRec.getIngredientsAmount()){
-            diffIngredient.update(ing.getFirst().getName(), -ing.getSecond());
+        for(Pair<String, Double> ing: oldRec.getIngredientsAmount()){
+            diffIngredient.update(ing.getFirst(), -ing.getSecond());
         }
-        for(Pair<Ingredient, Double> ing: newRec.getIngredientsAmount()){
-            double amount = diffIngredient.getAmount(ing.getFirst().getName());
-            diffIngredient.update(ing.getFirst().getName(), amount + ing.getSecond());
+        for(Pair<String, Double> ing: newRec.getIngredientsAmount()){
+            double amount = diffIngredient.getAmount(ing.getFirst());
+            diffIngredient.update(ing.getFirst(), amount + ing.getSecond());
         }
         return diffIngredient;
     }

@@ -19,9 +19,9 @@ public class IngAmountCollection implements Iterable<IngAmountPair>, Serializabl
         this.collection = collection;
     }
 
-    public IngAmountCollection(Iterable<Pair<Ingredient, Double>> collection){
-        for (Pair<Ingredient, Double> p : collection) {
-            this.add(p.getFirst().getName(), p.getSecond());
+    public IngAmountCollection(Iterable<Pair<String, Double>> collection){
+        for (Pair<String, Double> p : collection) {
+            this.add(p.getFirst(), p.getSecond());
         }
     }
 

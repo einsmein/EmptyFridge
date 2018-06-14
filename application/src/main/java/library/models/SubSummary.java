@@ -15,7 +15,8 @@ public class SubSummary implements Comparable<SubSummary>{
     }
 
     public boolean hasLowerWaste(SubSummary s){
-        return this.compareTo(s) < -1;
+//        return this.diffWasteScore < s.diffWasteScore;
+        return this.compareTo(s) < 0;
     }
 
     @Override

@@ -11,9 +11,9 @@ import java.util.ArrayList;
 public class Recipe implements Comparable<Recipe>{
     @Id private String id;
     @UniqueElements protected String name;
-    protected ArrayList<Pair<Ingredient,Double>> ingAmount;
+    protected ArrayList<Pair<String,Double>> ingAmount;
 
-    public Recipe(String name, ArrayList<Pair<Ingredient,Double>> ingAmount){
+    public Recipe(String name, ArrayList<Pair<String,Double>> ingAmount){
         this.name = name;
         this.ingAmount = ingAmount;
     }
@@ -25,15 +25,15 @@ public class Recipe implements Comparable<Recipe>{
         this.name = name;
     }
 
-    public Iterable<Pair<Ingredient,Double>> getIngredientsAmount(){
+    public Iterable<Pair<String,Double>> getIngredientsAmount(){
         return ingAmount;
     }
-    public void addIngredients(Iterable<Pair<Ingredient,Double>> ingAmount){
+    public void addIngredients(Iterable<Pair<String,Double>> ingAmount){
         ingAmount.forEach(ing -> this.ingAmount.add(ing));
     }
 
-    public void addIngredient(Ingredient ingredient, double amount){
-        this.ingAmount.add(Pair.of(ingredient, amount));
+    public void addIngredient(String ingredientName, double amount){
+        this.ingAmount.add(Pair.of(ingredientName, amount));
     }
 
     @Override
