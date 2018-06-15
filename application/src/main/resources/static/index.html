@@ -1,32 +1,44 @@
 <html ng-app="app">
 <head>
     <title>EmptyFridge</title>
-    <script type="text/javascript" src="./js/angular.min.js"></script>
-    <script type="text/javascript" src="./js/app/app.js"></script>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 </head>
 <body ng-controller="AppController">
+
 <div class="container">
-    <div class="form-group" id="menu-selection">
-        <form id="chooseMenu" ng-submit="chooseRecipes()">
-            <select multiple class="form-control" ng-model="chosenMenus" name="chooseMenu">
-                <option ng-repeat="m in menus">{{m.name}}</option>
-            </select>
-            <input type="submit">
-        </form>
+    <div class="row">
+        <div class="form-group" id="menu-selection">
+            <form id="chooseMenu" ng-submit="chooseRecipes()">
+                <select multiple class="form-control" ng-model="chosenMenus" name="chooseMenu">
+                    <option ng-repeat="m in menus">{{m.name}}</option>
+                </select>
+                <input type="submit">
+            </form>
+        </div>
     </div>
 
-    <div id="ingredients">
-
+    <div id="ingredients" class="row">
+        <h1>My Cart</h1>
+        <div class="row">
+            <div class="col-md-5">Product</div>
+            <div class="col-md-1">Amount</div>
+            <div class="col-md-2"></div>
+            <div class="col-md-2">Waste amount</div>
+            <div class="col-md-2">Waste score</div>
+        </div>
+        <ingredients ng-repeat="i in ingredients" ingredient="i"></ingredients>
     </div>
 
-    <div id="suggestions">
-        <suggestions></suggestions>
+    <div id="suggestions" class="row">
+        <h1>Suggestions to reduce food waste</h1>
+        <div class="row">
+            <div class="col-md-2"><h3>From</h3></div>
+            <div class="col-md-1"></div>
+            <div class="col-md-2"><h3>To</h3></div>
+            <div class="col-md-5"><h3>Waste difference</h3></div>
+            <div class="col-md-2"></div>
+        </div>
+        <suggestions ng-repeat="s in suggestions" suggestion="s"></suggestions>
     </div>
 
     <div>
@@ -40,5 +52,30 @@
     </div>
 
 </div>
+
+<script type="text/javascript" src="./js/angular.min.js"></script>
+<script type="text/javascript" src="./js/app/app.js"></script>
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Rockwell' >
+<style>
+    body {
+        font-family:'Rockwell' ;font-size: 22px;
+    }
+
+    .table th, .table td {
+         font-size: 18px
+         border-top: none !important;
+     }
+
+    #suggestion-box {
+        margin:20 0 20 0px;
+        border-bottom: 2px solid #BCBCBC;
+    }
+</style>
 </body>
 </html>

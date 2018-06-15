@@ -1,0 +1,21 @@
+<div class="row" id="suggestion-box">
+    <div class="col-md-2">
+        {{$ctrl.suggestion.oldRecipe.name}}
+    </div>
+    <div class="col-md-1"> > </div>
+    <div class="col-md-2">
+        {{$ctrl.suggestion.newRecipe.name}}
+    </div>
+    <div class="col-md-5">
+        <table class="table table-condensed">
+            <tr ng-repeat="ing in $ctrl.suggestion.diffAmountCollection" style="border:none">
+                <td>{{ing.ingredientName}}</td>
+                <td>{{ing.amount}} g</td>
+            </tr>
+        </table>
+        Reduce waste score by {{$ctrl.suggestion.diffWasteScore}}
+    </div>
+    <div class="col-md-2">
+        <button>Select</button>
+    </div>
+</div>

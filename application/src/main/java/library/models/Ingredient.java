@@ -11,6 +11,7 @@ public class Ingredient {
     protected double wastePenalty;
     protected int dayTillExp;
     protected double portion;
+    protected double price;
 
     public Ingredient(String name, double wastePenalty, int dayTillExp, double portion){
         this.name = name;

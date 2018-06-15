@@ -2,7 +2,7 @@ angular.module('app', [])
     .controller('AppController', function AppController($scope, $http){
         $scope.menus = [];
         $scope.ingredients = []; //product name, price, leftover, score
-        $scope.suggestions = [1,2,3,4]; //change from, to, waste diff, reduced score
+        $scope.suggestions = []; //change from, to, waste diff, reduced score
 
         $scope.chosenMenus = [];
 
@@ -26,10 +26,14 @@ angular.module('app', [])
         $scope.chooseRecipes = function(){
             var req = {
                 method: "POST",
+                data: $scope.chosenMenus,
                 url: "/calculator/calculate"
             };
             $http(req)
                 .then(function (response) {
+                    data = angular.fromJson(response.data);
+                    $scope.ingredients = data["ingredientsSummary"];
+                    $scope.suggestions = data["suggestionList"];
                     $scope.response = response;
                 }, function (response) {
                     $scope.response = response;
@@ -38,12 +42,21 @@ angular.module('app', [])
 
         $scope.getRecipes();
     })
+    .component('ingredients', {
+        templateUrl: 'ingredients.component.html',
+        bindings: {
+            ingredient: '='
+        }
+    })
     .component('suggestions', {
         templateUrl: 'suggestions.component.html',
+        styleUrls: ['suggestions.component.css'],
         bindings: {
-            suggestions: '='
+            suggestion: '='
         }
-    }).run(function($templateCache) {
-          var template = '<h1> LoginComponent </h1>';
-          $templateCache.put( 'suggestions.component.html' , template );
-    });;
+    })
+//    .run(function($templateCache) {
+//          var template = '<h1> LoginComponent </h1>';
+//          $templateCache.put( 'suggestions.component.html' , template );
+//    })
+    ;

@@ -1,6 +1,6 @@
 package library.models;
 
 public class IngAndSuggestionResponse {
-    public IngSummaryCollection ingredientsSummary;
-    public Iterable<SubSummary> suggestionList;
+    public Iterable<IngredientSummaryEntry> ingredientsSummary;
+    public Iterable<SuggestionSummary> suggestionList;
 }
