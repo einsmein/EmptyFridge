@@ -9,10 +9,12 @@ public class IngredientSummaryMap implements Serializable {
     private ObjectMapper mapper = new ObjectMapper();
     Map<String, IngredientSummary> map = new HashMap<>();
     double wasteScore = 0;
+    double price = 0;
 
     public void add(String ingredientName, IngredientSummary summary){
         map.put(ingredientName, summary);
         wasteScore += summary.wasteScore;
+        price += summary.price;
     }
 
     public boolean has(String ingredientName){
@@ -41,6 +43,8 @@ public class IngredientSummaryMap implements Serializable {
     public double getWasteScore(){
         return wasteScore;
     }
+
+    public double getPrice() {return price;}
 
     public List<IngredientSummaryEntry> getIngredientSummaryEntries(){
         ArrayList<IngredientSummaryEntry> entries = new ArrayList<>();

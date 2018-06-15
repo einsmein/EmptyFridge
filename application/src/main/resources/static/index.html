@@ -21,9 +21,9 @@
         <h1>My Cart</h1>
         <div class="row">
             <div class="col-md-5">Product</div>
-            <div class="col-md-1">Amount</div>
-            <div class="col-md-2"></div>
-            <div class="col-md-2">Waste amount</div>
+            <div class="col-md-1" style="padding:0">Amount</div>
+            <div class="col-md-1"></div>
+            <div class="col-md-3">Waste amount</div>
             <div class="col-md-2">Waste score</div>
         </div>
         <ingredients ng-repeat="i in ingredients" ingredient="i"></ingredients>
@@ -64,7 +64,7 @@
 <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Rockwell' >
 <style>
     body {
-        font-family:'Rockwell' ;font-size: 22px;
+        font-family:'Rockwell'; font-size: 22px;
     }
 
     .table th, .table td {
@@ -73,7 +73,7 @@
      }
 
     #suggestion-box {
-        margin:20 0 20 0px;
+        padding:20 0 20 0px;
         border-bottom: 2px solid #BCBCBC;
     }
 </style>

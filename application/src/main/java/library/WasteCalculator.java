@@ -46,10 +46,11 @@ public class WasteCalculator {
             Ingredient ing = ingRepo.findByName(ingName);
             double amount = allIngredients.getAmount(ingName);
             int piece = (int) Math.ceil(amount/ing.getPortion());
+            double price = piece*ing.getPrice();
             double leftover = piece*ing.getPortion() - amount;
             double wasteScore = ing.getWastePenalty()*(1.0/(1+Math.pow(ing.getDayTillExp(),1.0/6)))*leftover;
 
-            summaryCollection.add(ing.getName(), new IngredientSummary(piece, leftover, Math.round(wasteScore*100.0)/100.0));
+            summaryCollection.add(ing.getName(), new IngredientSummary(piece, price, leftover, Math.round(wasteScore*100.0)/100.0));
         }
 
         return summaryCollection;
@@ -58,6 +59,7 @@ public class WasteCalculator {
     // recipes: chosen set of recipe
     public List<SuggestionSummary> getSuggestion(List<Recipe> recipes, IngredientAmountMap ingredients, IngredientSummaryMap summary){
         double oldWasteScore = summary.getWasteScore();
+        double oldPrice = summary.getPrice();
         ArrayList<String> recipeNames = new ArrayList<>();
         recipes.forEach(rec -> recipeNames.add(rec.getName()));
 
@@ -83,6 +85,7 @@ public class WasteCalculator {
                 IngredientAmountMap newIngredients = getAllIngredient(ingredients, diff);
                 IngredientSummaryMap newSummaries = getSummary(newIngredients);
                 double newWasteScore = newSummaries.getWasteScore();
+                double newPrice = newSummaries.getPrice();
 
                 // If heap is not full, add new sub
                 // If full, peek the maximum SuggestionSummary, if waste score is higher than new sub, replace it
@@ -91,7 +94,8 @@ public class WasteCalculator {
                         chosenRec,
                         newRec,
                         getDiffWaste(summary, newSummaries),
-                        Math.round((newWasteScore-oldWasteScore)*100.0)/100.0);
+                        Math.round((newWasteScore-oldWasteScore)*100.0)/100.0,
+                        newPrice-oldPrice);
                 if (suggestions.size() < maxSuggestion){
                     suggestions.add(suggestionSummary);
                 }
@@ -130,6 +134,8 @@ public class WasteCalculator {
         IngAndSuggestionResponse response = new IngAndSuggestionResponse();
         response.ingredientsSummary = summary.getIngredientSummaryEntries();
         response.suggestionList = suggestions;
+        response.totalWaste = summary.getWasteScore();
+        response.totlaPrice = summary.getPrice();
 
         return response;
     }
