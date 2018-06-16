@@ -6,21 +6,13 @@
 <body ng-controller="AppController">
 
 <div class="container">
-    <div>
-        <div class="row section">
-            <!--<div class="form-group" id="menu-selection">-->
-                <!--<form id="chooseMenu" ng-submit="chooseRecipes()">-->
-                    <!--<select multiple class="form-control" ng-model="chosenMenus" name="chooseMenu">-->
-                        <!--<option ng-repeat="r in recipes">{{r.name}}</option>-->
-                    <!--</select>-->
-                    <!--<input type="submit">-->
-                <!--</form>-->
-            <!--</div>-->
+    <div id="recipes" class="section">
+        <h1>Select menus</h1>
+        <div class="row fixed">
             <recipes ng-repeat="r in recipeSelection" recipe="r" on-click-recipe="onClickRecipe" btn-settings="btnSettings"></recipes>
         </div>
-        <center><button class="btn btn-warning" ng-click="chooseRecipes()">Submit</button></center>
+        <center><button class="btn btn-warning btn-submit" ng-click="chooseRecipes()">Submit</button></center>
     </div>
-
 
     <div id="ingredients" class="row section">
         <h1>My Cart</h1>
@@ -73,10 +65,15 @@
         font-family:'Rockwell'; font-size: 22px;
     }
 
-    <!--.table th, .table td {-->
-         <!--font-size: 18px-->
-         <!--border-top: none !important;-->
-     <!--}-->
+    .section>h1 {
+        font-size: 40px;
+        padding-bottom: 20px;
+    }
+
+    .fixed {
+        height: 75%;
+        overflow: auto;
+    }
 
     #suggestion-box {
         padding:20 0 20 0px;
@@ -84,8 +81,17 @@
     }
 
     .section {
-        padding: 30px 0 0 0;
+        padding: 30px 0 30px 0;
     }
+
+    .btn-submit {
+        margin: 15px;
+        font-size: 20px;
+     }
+
+     <!--#ingredients {-->
+        <!--display: none;-->
+     <!--}-->
 </style>
 </body>
 </html>

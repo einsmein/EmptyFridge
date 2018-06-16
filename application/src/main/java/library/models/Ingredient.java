@@ -18,7 +18,7 @@ public class Ingredient {
         this.wastePenalty = wastePenalty;
         this.dayTillExp = dayTillExp;
         this.portion = portion;
-        this.price = price;
+        this.price = Math.round(price*100.0)/100.0;
     }
 
     public String getName() {return name; }
