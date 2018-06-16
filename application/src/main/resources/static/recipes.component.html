@@ -1,0 +1,13 @@
+<div class="item  col-xs-3 col-lg-3">
+    <div class="thumbnail">
+            <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
+            <div class="caption">
+            <center>
+                <h3 class="group inner list-group-item-heading">{{$ctrl.recipe.name}}</h3>
+                <!--$ctrl.btnSettings[$ctrl.recipe.chosen].color-->
+                <button class="btn {{$ctrl.btnSettings[$ctrl.recipe.chosen].color}}" ng-click="$ctrl.onClickRecipe($ctrl.recipe.name)">{{$ctrl.btnSettings[$ctrl.recipe.chosen].text}}</button>
+                <!--<button class="btn btn-success" ng-click="$ctrl.onDeselect($ctrl.recipe.name)">Remove</button>-->
+            </center>
+        </div>
+    </div>
+</div>

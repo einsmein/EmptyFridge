@@ -6,36 +6,42 @@
 <body ng-controller="AppController">
 
 <div class="container">
-    <div class="row">
-        <div class="form-group" id="menu-selection">
-            <form id="chooseMenu" ng-submit="chooseRecipes()">
-                <select multiple class="form-control" ng-model="chosenMenus" name="chooseMenu">
-                    <option ng-repeat="m in menus">{{m.name}}</option>
-                </select>
-                <input type="submit">
-            </form>
+    <div>
+        <div class="row section">
+            <!--<div class="form-group" id="menu-selection">-->
+                <!--<form id="chooseMenu" ng-submit="chooseRecipes()">-->
+                    <!--<select multiple class="form-control" ng-model="chosenMenus" name="chooseMenu">-->
+                        <!--<option ng-repeat="r in recipes">{{r.name}}</option>-->
+                    <!--</select>-->
+                    <!--<input type="submit">-->
+                <!--</form>-->
+            <!--</div>-->
+            <recipes ng-repeat="r in recipeSelection" recipe="r" on-click-recipe="onClickRecipe" btn-settings="btnSettings"></recipes>
         </div>
+        <center><button class="btn btn-warning" ng-click="chooseRecipes()">Submit</button></center>
     </div>
 
-    <div id="ingredients" class="row">
+
+    <div id="ingredients" class="row section">
         <h1>My Cart</h1>
         <div class="row">
-            <div class="col-md-5">Product</div>
-            <div class="col-md-1" style="padding:0">Amount</div>
+            <div class="col-md-4">Product</div>
+            <div class="col-md-1" style="padding:0"><center>Unit</center></div>
             <div class="col-md-1"></div>
-            <div class="col-md-3">Waste amount</div>
-            <div class="col-md-2">Waste score</div>
+            <div class="col-md-1"><center>Price</center></div>
+            <div class="col-md-3"><center>Waste amount</center></div>
+            <div class="col-md-2"><center>Waste score</center></div>
         </div>
         <ingredients ng-repeat="i in ingredients" ingredient="i"></ingredients>
     </div>
 
-    <div id="suggestions" class="row">
+    <div id="suggestions" class="row section">
         <h1>Suggestions to reduce food waste</h1>
         <div class="row">
             <div class="col-md-2"><h3>From</h3></div>
             <div class="col-md-1"></div>
             <div class="col-md-2"><h3>To</h3></div>
-            <div class="col-md-5"><h3>Waste difference</h3></div>
+            <div class="col-md-5"><center><h3>Waste difference</h3></center></div>
             <div class="col-md-2"></div>
         </div>
         <suggestions ng-repeat="s in suggestions" suggestion="s"></suggestions>
@@ -44,7 +50,7 @@
     <div>
         <h2>DEBUG Response</h2>
         <p>
-            {{chosenMenus}}
+            {{selectedRecipes}}
         </p>
         <p>
             {{response}}
@@ -67,14 +73,18 @@
         font-family:'Rockwell'; font-size: 22px;
     }
 
-    .table th, .table td {
-         font-size: 18px
-         border-top: none !important;
-     }
+    <!--.table th, .table td {-->
+         <!--font-size: 18px-->
+         <!--border-top: none !important;-->
+     <!--}-->
 
     #suggestion-box {
         padding:20 0 20 0px;
         border-bottom: 2px solid #BCBCBC;
+    }
+
+    .section {
+        padding: 30px 0 0 0;
     }
 </style>
 </body>

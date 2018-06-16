@@ -49,7 +49,7 @@ public class IngredientSummaryMap implements Serializable {
     public List<IngredientSummaryEntry> getIngredientSummaryEntries(){
         ArrayList<IngredientSummaryEntry> entries = new ArrayList<>();
         for(Map.Entry<String, IngredientSummary> entry : map.entrySet()){
-            entries.add(new IngredientSummaryEntry(entry.getKey(), entry.getValue().piece, entry.getValue().wasteAmount, entry.getValue().wasteScore));
+            entries.add(new IngredientSummaryEntry(entry.getKey(), entry.getValue().piece, entry.getValue().price, entry.getValue().wasteAmount, entry.getValue().wasteScore));
         }
         return entries;
     }

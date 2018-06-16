@@ -1,14 +1,35 @@
 angular.module('app', [])
     .controller('AppController', function AppController($scope, $http){
-        $scope.menus = [];
+        $scope.recipes = [];
         $scope.ingredients = []; //product name, price, leftover, score
         $scope.suggestions = []; //change from, to, waste diff, reduced score
 
-        $scope.chosenMenus = [];
+//        $scope.chosenMenus = [];
+        $scope.recipeSelection = [];
 
         $scope.response = null;
 
+        // Select / deselect recipe
+        $scope.onClickRecipe = function(recipeName){
+            var found = $scope.recipeSelection.find(function(element) {
+              return element.name == recipeName;
+            });
 
+            found.chosen = (found.chosen + 1)%2;
+        }
+
+        $scope.getChosenMenus = function(){
+            var chosenMenus = [];
+            $scope.recipeSelection.forEach(function(selection) {
+                if(selection.chosen) {
+                    chosenMenus.push(selection.name);
+                }
+            });
+            console.log(chosenMenus);
+            return chosenMenus;
+        }
+
+        // Get recipe from database
         $scope.getRecipes = function(){
             var req = {
                 method: "GET",
@@ -16,17 +37,26 @@ angular.module('app', [])
             };
             $http(req)
                 .then(function (response) {
-                    $scope.menus = angular.fromJson(response.data);
+                    $scope.recipes = angular.fromJson(response.data);
                     $scope.response = response.data;
+
+                    $scope.recipes.forEach(function(recipe) {
+                        $scope.recipeSelection.push({
+                            name: recipe.name,
+                            chosen: 0
+                        })
+                    })
+                    console.log($scope.recipeSelection);
                 }, function (response) {
                     $scope.response = response;
                 });
         }
 
+        // Submit chosen recipe to calculate waste
         $scope.chooseRecipes = function(){
             var req = {
                 method: "POST",
-                data: $scope.chosenMenus,
+                data: $scope.getChosenMenus(),
                 url: "/calculator/calculate"
             };
             $http(req)
@@ -40,7 +70,20 @@ angular.module('app', [])
                 });
         }
 
+        $scope.btnSettings = [
+            { color: 'btn-success', text: 'Select' }, // selecting button
+            { color: 'btn-danger', text: 'Remove' } // deselection button
+        ]
+
         $scope.getRecipes();
+    })
+    .component('recipes', {
+        templateUrl: 'recipes.component.html',
+        bindings: {
+            recipe: '=',
+            btnSettings: '=',
+            onClickRecipe: '<'
+        }
     })
     .component('ingredients', {
         templateUrl: 'ingredients.component.html',

@@ -39,7 +39,7 @@ public class WasteCalculator {
         return newCollection;
     }
 
-    public IngredientSummaryMap getSummary(IngredientAmountMap allIngredients){
+    public IngredientSummaryMap getIngredientSummary(IngredientAmountMap allIngredients){
         IngredientSummaryMap summaryCollection = new IngredientSummaryMap();
 
         for(String ingName: allIngredients.getIngredientSet()){
@@ -83,9 +83,10 @@ public class WasteCalculator {
                 // If it does, calculate delta to create summary of substitution
                 IngredientAmountMap diff = getDiffIngredientAmount(chosenRec, newRec);
                 IngredientAmountMap newIngredients = getAllIngredient(ingredients, diff);
-                IngredientSummaryMap newSummaries = getSummary(newIngredients);
+                IngredientSummaryMap newSummaries = getIngredientSummary(newIngredients);
                 double newWasteScore = newSummaries.getWasteScore();
                 double newPrice = newSummaries.getPrice();
+                if(newWasteScore > oldWasteScore) continue;
 
                 // If heap is not full, add new sub
                 // If full, peek the maximum SuggestionSummary, if waste score is higher than new sub, replace it
@@ -127,15 +128,16 @@ public class WasteCalculator {
         ArrayList<Recipe> recipeList = new ArrayList<>();
         recipes.forEach(rec -> recipeList.add(rec));
         IngredientAmountMap ingredients = getAllIngredient(recipes);
-        IngredientSummaryMap summary = getSummary(ingredients);
+        IngredientSummaryMap summary = getIngredientSummary(ingredients);
 
         List<SuggestionSummary> suggestions = getSuggestion(recipeList, ingredients, summary);
+        Collections.reverse(suggestions);
 
         IngAndSuggestionResponse response = new IngAndSuggestionResponse();
         response.ingredientsSummary = summary.getIngredientSummaryEntries();
         response.suggestionList = suggestions;
         response.totalWaste = summary.getWasteScore();
-        response.totlaPrice = summary.getPrice();
+        response.totalPrice = summary.getPrice();
 
         return response;
     }

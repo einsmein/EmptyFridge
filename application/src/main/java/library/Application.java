@@ -87,7 +87,7 @@ public class Application implements CommandLineRunner {
         Ingredient cauliflower  = new Ingredient("cauliflower", 1.3, 3, 150.0, 24.90);
         Ingredient bakingPowder  = new Ingredient("baking powder", 1.0, 270, 250.0, 28.80);
 
-        ingredientRepo.insert(Arrays.asList(pork, outerFilletPork, beefSirloin, shrimp, chickenFillet, salmonFillet, bacon, ham, potato,mushroom, egg,
+        ingredientRepo.insert(Arrays.asList(outerFilletPork, beefSirloin, shrimp, chickenFillet, salmonFillet, bacon, ham, potato,mushroom, egg,
                 mayonnaise, butter, flour, heavyCream, fettuccine, spaghetti, cheese, milk, chili, coriander, garlic, ginger, pakChoi, springOnion,
                 onion, turmeric, cayennePepper, lemongrass, bellPepper, shallot, capers, celery, lemon, orange, lemonJuice, chickenBroth,
                 parsley, basil, thyme, bayLeaf, cumin, oregano, lime, tomato, lettuce, avocado, mapleSyrup, cauliflower, bakingPowder));
@@ -322,13 +322,13 @@ public class Application implements CommandLineRunner {
 
 
         // Testing
-        Ingredient a = new Ingredient("A", 1, 3, 20, 1);
-        Ingredient b = new Ingredient("B", 1, 3, 30, 1);
-        Ingredient c = new Ingredient("C", 1, 3, 20, 1);
+        Ingredient a = new Ingredient("A", 1, 3, 20, 2);
+        Ingredient b = new Ingredient("B", 1, 3, 30, 3);
+        Ingredient c = new Ingredient("C", 1, 3, 20, 4);
         Ingredient d = new Ingredient("D", 1, 5, 10, 1);
         Ingredient e = new Ingredient("E", 2, 7, 20, 1);
-        Ingredient f = new Ingredient("F", 5, 3, 30, 1);
-        Ingredient g = new Ingredient("G", 2, 5, 20, 1);
+        Ingredient f = new Ingredient("F", 5, 3, 30, 2);
+        Ingredient g = new Ingredient("G", 2, 5, 20, 0.5);
         ingredientRepo.insert(Arrays.asList(a, b, c, d, e, f, g));
 
         ingList.add(Pair.of(a.getName(), 4.0));

@@ -7,7 +7,7 @@
         {{$ctrl.suggestion.newRecipe.name}}
     </div>
     <div class="col-md-5">
-        <table class="table table-condensed">
+        <table class="table table-condensed table-borderless">
             <tr ng-repeat="ing in $ctrl.suggestion.diffAmountCollection" style="border:none">
                 <td>{{ing.ingredientName}}</td>
                 <td>{{ing.amount}} g</td>
@@ -16,6 +16,6 @@
         <p style="font-size: 15px">Reduce waste score by {{$ctrl.suggestion.diffWasteScore}}</p>
     </div>
     <div class="col-md-2">
-        <button>Select</button>
+        <button class="btn-warning">Select</button>
     </div>
 </div>
