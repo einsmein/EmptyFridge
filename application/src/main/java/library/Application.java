@@ -33,59 +33,59 @@ public class Application implements CommandLineRunner {
         ingredientRepo.deleteAll();
 
         // TODO: Add ingredients
-        Ingredient pork = new Ingredient("pork", 2.0, 5, 235.0);
-        Ingredient outerFilletPork = new Ingredient("outer fillet pork", 2.0, 5, 730.0);
-        Ingredient beefSirloin = new Ingredient("beef sirloin", 2.0, 5, 365.0);
-        Ingredient shrimp = new Ingredient("shrimp", 2.0, 7, 200.0);
-        Ingredient chickenFillet = new Ingredient("chicken fillet", 2.0, 5, 200.0);
-        Ingredient salmonFillet = new Ingredient("salmon fillet", 2.0, 3, 200.0);
-        Ingredient bacon = new Ingredient("bacon", 2.0, 7, 200.0);
-        Ingredient ham = new Ingredient("ham", 2.0, 7, 100.0);
+        // Ingredient pork = new Ingredient("pork", 2.0, 5, 235.0, );
+        Ingredient outerFilletPork = new Ingredient("outer fillet pork", 2.0, 5, 730.0, 109.00);
+        Ingredient beefSirloin = new Ingredient("beef sirloin", 2.0, 5, 365.0, 119.90);
+        Ingredient shrimp = new Ingredient("shrimp", 2.0, 7, 200.0, 44.00);
+        Ingredient chickenFillet = new Ingredient("chicken fillet", 2.0, 5, 200.0, 130.90);
+        Ingredient salmonFillet = new Ingredient("salmon fillet", 2.0, 3, 200.0, 82.30);
+        Ingredient bacon = new Ingredient("bacon", 2.0, 7, 200.0, 40.30);
+        Ingredient ham = new Ingredient("ham", 2.0, 7, 100.0, 15.00);
 
-        Ingredient potato = new Ingredient("potato", 1.8, 21, 1000.0);
-        Ingredient mushroom = new Ingredient("mushroom", 1.8, 5, 250.0);
-        Ingredient egg = new Ingredient("egg", 1.8, 7, 800.0);
-        Ingredient mayonnaise = new Ingredient("mayonnaise", 1.8, 60, 160.0);
-        Ingredient butter = new Ingredient("butter", 1.8, 180, 250.0);
-        Ingredient flour = new Ingredient("flour", 1.8, 365, 1000.0);
-        Ingredient heavyCream = new Ingredient("heavy cream", 1.8, 6, 300.0); // 300 in ml
-        Ingredient fettuccine = new Ingredient("fettuccine", 1.8, 365, 500.0);
-        Ingredient spaghetti = new Ingredient("spaghetti", 1.8, 365, 500.0);
-        Ingredient cheese = new Ingredient("cheese", 1.8, 60, 300.0);
-        Ingredient milk = new Ingredient("milk", 1.8, 6, 1000.0); // in ml
+        Ingredient potato = new Ingredient("potato", 1.8, 21, 1000.0, 24.90);
+        Ingredient mushroom = new Ingredient("mushroom", 1.8, 5, 250.0, 8.72);
+        Ingredient egg = new Ingredient("egg", 1.8, 7, 800.0, 39.90);
+        Ingredient mayonnaise = new Ingredient("mayonnaise", 1.8, 60, 160.0, 19.00);
+        Ingredient butter = new Ingredient("butter", 1.8, 180, 250.0, 28.90);
+        Ingredient flour = new Ingredient("flour", 1.8, 365, 1000.0, 9.80);
+        Ingredient heavyCream = new Ingredient("heavy cream", 1.8, 6, 300.0, 19.70); // 300 in ml
+        Ingredient fettuccine = new Ingredient("fettuccine", 1.8, 365, 500.0, 24.30);
+        Ingredient spaghetti = new Ingredient("spaghetti", 1.8, 365, 500.0, 21.70);
+        Ingredient cheese = new Ingredient("cheese", 1.8, 60, 300.0, 47.30);
+        Ingredient milk = new Ingredient("milk", 1.8, 6, 1000.0, 17.10); // in ml
         //Ingredient rice = new Ingredient("rice", 1.8, 180, 1000);
 
-        Ingredient chili = new Ingredient("chili", 1.3, 4, 50.0);
-        Ingredient coriander = new Ingredient("coriander", 1.3, 5, 20.0);
-        Ingredient garlic = new Ingredient("garlic", 1.3, 120, 100.0);
-        Ingredient ginger = new Ingredient("ginger", 1.3, 30, 100.0);
-        Ingredient pakChoi = new Ingredient("pak choi", 1.3, 7, 125.0);
-        Ingredient springOnion = new Ingredient("spring onion", 1.3, 7, 150.0);
-        Ingredient onion = new Ingredient("onion", 1.3, 30, 630.0);
-        Ingredient turmeric = new Ingredient("turmeric", 1.3, 365, 70.0);
-        Ingredient cayennePepper = new Ingredient("cayenne pepper", 1.3, 365, 62.0);
-        Ingredient lemongrass = new Ingredient("lemongrass", 1.3, 14, 50.0);
-        Ingredient bellPepper = new Ingredient("bell pepper", 1.3, 14, 260.0);
-        Ingredient shallot = new Ingredient("shallot", 1.3, 14, 200.0);
-        Ingredient capers = new Ingredient("capers", 1.3, 365, 100.0);
-        Ingredient celery = new Ingredient("celery", 1.3, 14, 500.0);
-        Ingredient lemon = new Ingredient("lemon", 1.3, 14, 380.0);
-        Ingredient orange = new Ingredient("orange", 1.3, 10, 320.0);
-        Ingredient lemonJuice = new Ingredient("lemon juice", 1.3, 120, 250.0); // 250 in ml
-        Ingredient chickenBroth = new Ingredient("chicken broth", 1.3, 180, 112.0);
-        Ingredient parsley  = new Ingredient("parsley", 1.3, 14, 20.0);
-        Ingredient basil  = new Ingredient("basil", 1.3, 5, 20.0);
-        Ingredient thyme  = new Ingredient("thyme", 1.3, 7, 20.0);
-        Ingredient bayLeaf  = new Ingredient("bay leaf", 1.3, 365, 2.0);
-        Ingredient cumin  = new Ingredient("cumin", 1.3, 365, 62.0);
-        Ingredient oregano  = new Ingredient("oregano", 1.3, 730, 10.0);
-        Ingredient lime  = new Ingredient("lime", 1.3, 14, 90.0);
-        Ingredient tomato  = new Ingredient("tomato", 1.3, 7, 200.0);
-        Ingredient lettuce  = new Ingredient("lettuce", 1.3, 7, 420.0);
-        Ingredient avocado  = new Ingredient("avocado", 1.3, 3, 300.0);
-        Ingredient mapleSyrup  = new Ingredient("maple syrup", 1.3, 540, 190.0); // in ml
-        Ingredient cauliflower  = new Ingredient("cauliflower", 1.3, 3, 150.0);
-        Ingredient bakingPowder  = new Ingredient("baking powder", 1.0, 270, 250.0);
+        Ingredient chili = new Ingredient("chili", 1.3, 4, 50.0, 23.90);
+        Ingredient coriander = new Ingredient("coriander", 1.3, 5, 20.0, 23.40);
+        Ingredient garlic = new Ingredient("garlic", 1.3, 120, 100.0, 14.60);
+        Ingredient ginger = new Ingredient("ginger", 1.3, 30, 100.0, 13.80);
+        Ingredient pakChoi = new Ingredient("pak choi", 1.3, 7, 125.0, 14.90);
+        Ingredient springOnion = new Ingredient("spring onion", 1.3, 7, 150.0, 14.90);
+        Ingredient onion = new Ingredient("onion", 1.3, 30, 630.0, 16.40);
+        Ingredient turmeric = new Ingredient("turmeric", 1.3, 365, 70.0, 37.90);
+        Ingredient cayennePepper = new Ingredient("cayenne pepper", 1.3, 365, 62.0, 37.70);
+        Ingredient lemongrass = new Ingredient("lemongrass", 1.3, 14, 50.0, 24.90);
+        Ingredient bellPepper = new Ingredient("bell pepper", 1.3, 14, 260.0, 15.00);
+        Ingredient shallot = new Ingredient("shallot", 1.3, 14, 200.0, 14.20);
+        Ingredient capers = new Ingredient("capers", 1.3, 365, 100.0, 28.40);
+        Ingredient celery = new Ingredient("celery", 1.3, 14, 500.0, 29.90);
+        Ingredient lemon = new Ingredient("lemon", 1.3, 14, 380.0, 13.64);
+        Ingredient orange = new Ingredient("orange", 1.3, 10, 320.0, 5.52);
+        Ingredient lemonJuice = new Ingredient("lemon juice", 1.3, 120, 250.0, 19.30); // 250 in ml
+        Ingredient chickenBroth = new Ingredient("chicken broth", 1.3, 180, 112.0,23.90);
+        Ingredient parsley  = new Ingredient("parsley", 1.3, 14, 20.0, 23.40);
+        Ingredient basil  = new Ingredient("basil", 1.3, 5, 20.0, 23.40);
+        Ingredient thyme  = new Ingredient("thyme", 1.3, 7, 20.0, 23.40);
+        Ingredient bayLeaf  = new Ingredient("bay leaf", 1.3, 365, 2.0, 7.20);
+        Ingredient cumin  = new Ingredient("cumin", 1.3, 365, 62.0, 31.70);
+        Ingredient oregano  = new Ingredient("oregano", 1.3, 730, 10.0, 21.20);
+        Ingredient lime  = new Ingredient("lime", 1.3, 14, 90.0, 3.00);
+        Ingredient tomato  = new Ingredient("tomato", 1.3, 7, 200.0, 39.90);
+        Ingredient lettuce  = new Ingredient("lettuce", 1.3, 7, 420.0, 19.90);
+        Ingredient avocado  = new Ingredient("avocado", 1.3, 3, 300.0, 27.90);
+        Ingredient mapleSyrup  = new Ingredient("maple syrup", 1.3, 540, 190.0, 74.20); // in ml
+        Ingredient cauliflower  = new Ingredient("cauliflower", 1.3, 3, 150.0, 24.90);
+        Ingredient bakingPowder  = new Ingredient("baking powder", 1.0, 270, 250.0, 28.80);
 
         ingredientRepo.insert(Arrays.asList(pork, outerFilletPork, beefSirloin, shrimp, chickenFillet, salmonFillet, bacon, ham, potato,mushroom, egg,
                 mayonnaise, butter, flour, heavyCream, fettuccine, spaghetti, cheese, milk, chili, coriander, garlic, ginger, pakChoi, springOnion,
@@ -322,13 +322,13 @@ public class Application implements CommandLineRunner {
 
 
         // Testing
-        Ingredient a = new Ingredient("A", 1, 3, 20);
-        Ingredient b = new Ingredient("B", 1, 3, 30);
-        Ingredient c = new Ingredient("C", 1, 3, 20);
-        Ingredient d = new Ingredient("D", 1, 5, 10);
-        Ingredient e = new Ingredient("E", 2, 7, 20);
-        Ingredient f = new Ingredient("F", 5, 3, 30);
-        Ingredient g = new Ingredient("G", 2, 5, 20);
+        Ingredient a = new Ingredient("A", 1, 3, 20, 1);
+        Ingredient b = new Ingredient("B", 1, 3, 30, 1);
+        Ingredient c = new Ingredient("C", 1, 3, 20, 1);
+        Ingredient d = new Ingredient("D", 1, 5, 10, 1);
+        Ingredient e = new Ingredient("E", 2, 7, 20, 1);
+        Ingredient f = new Ingredient("F", 5, 3, 30, 1);
+        Ingredient g = new Ingredient("G", 2, 5, 20, 1);
         ingredientRepo.insert(Arrays.asList(a, b, c, d, e, f, g));
 
         ingList.add(Pair.of(a.getName(), 4.0));

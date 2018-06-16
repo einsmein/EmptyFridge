@@ -13,12 +13,12 @@ public class Ingredient {
     protected double portion;
     protected double price;
 
-    public Ingredient(String name, double wastePenalty, int dayTillExp, double portion){//, double price){
+    public Ingredient(String name, double wastePenalty, int dayTillExp, double portion,  double price){
         this.name = name;
         this.wastePenalty = wastePenalty;
         this.dayTillExp = dayTillExp;
         this.portion = portion;
-//        this.price = price;
+        this.price = price;
     }
 
     public String getName() {return name; }
